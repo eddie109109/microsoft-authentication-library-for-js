@@ -5,7 +5,8 @@
 
 import { INavigationClient } from "./INavigationClient";
 import { NavigationOptions } from "./NavigationOptions";
-
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 export class NavigationClient implements INavigationClient {
     /**
      * Navigates to other pages within the same web application
@@ -40,8 +41,15 @@ export class NavigationClient implements INavigationClient {
         url: string,
         options: NavigationOptions
     ): Promise<boolean> {
-        if (options.noHistory) {
-            window.location.replace(url);
+        /*
+         * if (options.noHistory) {
+         *     window.location.replace(url);
+         * } else {
+         *     window.location.assign(url);
+         * }
+         */
+        if (Capacitor.isNativePlatform()) {
+            Browser.open({ url });
         } else {
             window.location.assign(url);
         }
